@@ -23,6 +23,9 @@ class Todo(models.Model):
         self._update_date_completed()
         return super().save(*args, **kwargs)
 
+    def __str__(self) -> str:
+        return self.title
+
 
 class CompletedTodoProxy(Todo):
     """
