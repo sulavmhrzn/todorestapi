@@ -1,14 +1,19 @@
-from django.db.models import query
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import generics
+from rest_framework.pagination import PageNumberPagination
 
 from todo.models import CompletedTodoProxy, Todo
 
 from .serializers import TodoSerializer
 
 
+class SmallResultSet(PageNumberPagination):
+    page_size = 10
+
+
 class TodoViewset(ModelViewSet):
+    pagination_class = SmallResultSet
     permission_classes = [IsAuthenticated]
     queryset = Todo.objects
     serializer_class = TodoSerializer
@@ -27,6 +32,7 @@ class TodoViewset(ModelViewSet):
 
 
 class CompletedTodoView(generics.ListAPIView):
+    pagination_class = SmallResultSet
     permission_classes = [IsAuthenticated]
     serializer_class = TodoSerializer
 
