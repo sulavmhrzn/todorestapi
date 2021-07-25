@@ -1,3 +1,4 @@
+from django.http import response
 from django.urls import reverse
 from django.contrib.auth.models import User
 
@@ -59,3 +60,32 @@ class TestTodoViews(APITestCase):
 
         response = self.client.delete(url)
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+
+
+class TestTodoCompleted(APITestCase):
+    def setUp(self):
+        self.client = APIClient()
+        user = User.objects.create(username="testuser", password="sulavmhrzn")
+        self.client.force_authenticate(user=user)
+
+    def _post_todo(self):
+        """Helper method to post to a database"""
+
+        data1 = {"title": "Test 1"}
+        data2 = {"title": "Test 2", "is_completed": True}
+
+        url = reverse("todo-list")
+        c1 = self.client.post(url, data=data1)
+        c2 = self.client.post(url, data=data2)
+        return c2
+
+    def test_completed_url_returns_only_completed_todos(self):
+        posted_data = self._post_todo()
+
+        url = reverse("todo-completed")
+        response = self.client.get(url)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(response.data), 1)
+        self.assertEqual(response.data[0].get("title"), posted_data.data.get("title"))
+        self.assertIsNotNone(response.data[0].get("date_completed"))
