@@ -1,4 +1,3 @@
-from django.http import response
 from django.urls import reverse
 from django.contrib.auth.models import User
 
@@ -84,8 +83,9 @@ class TestTodoCompleted(APITestCase):
 
         url = reverse("todo-completed")
         response = self.client.get(url)
+        response_data = response.data.get("results")
 
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(len(response.data), 1)
-        self.assertEqual(response.data[0].get("title"), posted_data.data.get("title"))
-        self.assertIsNotNone(response.data[0].get("date_completed"))
+        self.assertEqual(len(response_data), 1)
+        self.assertEqual(response_data[0].get("title"), posted_data.data.get("title"))
+        self.assertIsNotNone(response_data[0].get("date_completed"))

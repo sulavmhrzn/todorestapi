@@ -23,5 +23,10 @@ class TestTodoModel(TestCase):
 
     def test_completed_todo_updates_date_completed(self):
         qs = CompletedTodoProxy.objects.first()
+
         self.assertIsNotNone(qs.date_completed)
         self.assertIsInstance(qs.date_completed, datetime.datetime)
+
+        qs.is_completed = False
+        qs.save()
+        self.assertIsNone(qs.date_completed)
