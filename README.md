@@ -9,7 +9,7 @@ A todo rest api made using django and django rest framework.
 ## Installation
 1. Clone the repository
     ```bash
-    git clone https://github.com/sulavmhrzn/toread-python.git
+    git clone https://github.com/sulavmhrzn/todorestapi.git
     ```
 1. Create a virtual environment
     ```python
